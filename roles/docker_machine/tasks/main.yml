@@ -1,9 +1,24 @@
 ---
 # tasks file for docker_machine
-- name: Install Docker Machine
-  shell: curl -L https://github.com/docker/machine/releases/download/v0.16.0/docker-machine-Linux-x86_64 > /usr/local/bin/docker-machine
-  args:
-    creates: /usr/local/bin/docker-machine
+- name: Install prerequisites
+  yum: name ={{item}}
+  with_items:
+    - yum-utils
+    - device-mapper-persistent-data
+    - lvm2
 
-- name: Apply executable permissions to docker-machine
-  file: path=/usr/local/bin/docker-machine state=file mode=0755
+- name: Add Docker repo
+  get_url:
+    url: https://download.docker.com/linux/centos/docker-ce.repo
+    dest: /etc/yum.repos.d/docer-ce.repo
+
+- name: Install Docker
+  package:
+    name: docker-ce
+    state: latest
+
+- name: Start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
