@@ -1,6 +1,7 @@
 ---
 - name: Provision an EC2 Instance
   hosts: all
+  tasks:
     - name: create ec2 instance
         ec2:
           image: ami-032509850cf9ee54e
