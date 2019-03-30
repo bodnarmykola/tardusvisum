@@ -11,3 +11,6 @@
         vpc_subnet_id: subnet-01383d6fcf8472c81
         region: us-west-2
         assign_public_ip: no
+        count: 2
+        instance_tags:
+          Name: webserver
