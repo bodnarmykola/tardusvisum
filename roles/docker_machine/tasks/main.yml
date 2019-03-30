@@ -29,6 +29,7 @@
 - name: Enable Extras repository
   ini_file:
     dest: /etc/yum.repos.d/CentOS-Base.repo
+    section: 'centos-base'
     option: enabled
     value: 0
 
