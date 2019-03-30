@@ -55,7 +55,7 @@
         - "{{ swarm_worker.instances }}"
 
     - name: Wait for SSH to come up
-      delegate_to: "{{ item }}"
+      delegate_to: "{{ item.public_dns_name }}"
       wait_for_connection:
         delay: 10
         timeout: 20
