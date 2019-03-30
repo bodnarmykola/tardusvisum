@@ -42,12 +42,12 @@
 
     - name: Add new instance to host group
       add_host:
-        hostname: "{{ swarm_manager.instances.private_ip }}"
+        hostname: "{{ swarm_manager.private_ip }}"
         groupname: swarm_manager
 
     - name: Add new instance to host group
       add_host:
-        hostname: "{{ swarm_worker.instances.private_ip }}"
+        hostname: "{{ swarm_worker.private_ip }}"
         groupname: swarm_worker
 
     - name: Wait for SSH to come up
