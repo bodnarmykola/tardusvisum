@@ -2,7 +2,7 @@
 - name: Provision an EC2 Instance
   hosts: localhost
   tasks:
-    - name: create ec2 instance
+    - name: create ec2 instance for swarm manager
       ec2:
         key_name: Ec2KeyPair
         image: ami-032509850cf9ee54e
@@ -17,7 +17,7 @@
           Name: swarm_manager
       register: swarm_manager
 
-    - name: create ec2 instance
+    - name: create ec2 instance for swarm workers
       ec2:
         key_name: Ec2KeyPair
         image: ami-032509850cf9ee54e

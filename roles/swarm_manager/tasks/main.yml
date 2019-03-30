@@ -1,2 +1,8 @@
 ---
 # tasks file for swarm_manager
+- name: Swarm init
+  shell: docker swarm init --advertise-addr {{ ansible_eth0['ipv4']['address'] }}
+
+- name: Get token
+  shell: docker swarm join-token -q worker
+  register: worker_token
