@@ -1,0 +1,9 @@
+---
+# tasks file for docker_machine
+- name: Install Docker Machine
+  shell: curl -L https://github.com/docker/machine/releases/download/v0.16.0/docker-machine-$(uname -s)-$(uname -m) > /usr/local/bin/docker-machine
+  args:
+    creates: /usr/local/bin/docker-machine
+
+- name: Apply executable permissions to docker-machine
+  file: path=/usr/local/bin/docker-machine state=file mode=0755
