@@ -40,11 +40,21 @@
         - "{{ swarm_manager.instances }}"
         - "{{ swarm_worker.instances }}"
 
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ swarm_manager.instances.private_ip }}"
+        groupname: swarm_manager
+
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ swarm_worker.instances.private_ip }}"
+        groupname: swarm_worker
+
     - name: Wait for SSH to come up
-      delegate_to: "{{ item.public_dns_name }}"
+      delegate_to: "{{ item }}"
       wait_for_connection:
-        delay: 60
-        timeout: 320
+        delay: 10
+        timeout: 20
       with_items:
         - "{{ swarm_manager.instances }}"
         - "{{ swarm_worker.instances }}"
@@ -57,14 +67,14 @@
     - docker_machine
 
 - name: Swarm manager init
-  hosts: "{{ swarm_worker.instances.private_ip }}"
+  hosts: swarm_manager
   become: True
   gather_facts: True
   roles:
     - swarm_manager
 
 - name: Swarm worker join
-  hosts: "{{ swarm_worker.instances.private_ip }}"
+  hosts: swarm_worker
   become: True
   gather_facts: True
   roles:
