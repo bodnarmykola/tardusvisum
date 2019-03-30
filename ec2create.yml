@@ -11,7 +11,7 @@
         group_id: sg-0df871cb89d78602d
         vpc_subnet_id: subnet-07c6811d5a119875c
         region: us-west-2
-        assign_public_ip: no
+        assign_public_ip: yes
         count: 2
         instance_tags:
           Name: webserver
