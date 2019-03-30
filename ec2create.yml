@@ -1,6 +1,6 @@
 ---
 - name: Provision an EC2 Instance
-  hosts: localhost
+  hosts: all
     - name: create ec2 instance
         ec2:
           image: ami-032509850cf9ee54e
