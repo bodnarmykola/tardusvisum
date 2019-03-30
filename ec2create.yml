@@ -1,16 +1,16 @@
 ---
 - name: Provision an EC2 Instance
-  hosts: all
+  hosts: localhost
   tasks:
     - name: create ec2 instance
-        ec2:
-          image: ami-032509850cf9ee54e
-          wait: yes
-          instance_type: t2.micro
-          group_id: sg-0df871cb89d78602d
-          vpc_subnet_id: subnet-01383d6fcf8472c81
-          region: us-west-2
-          count_tag: 2
-            Name: webserver
-          exact_count: 2
-          assign_public_ip: no
+      ec2:
+        image: ami-032509850cf9ee54e
+        wait: yes
+        instance_type: t2.micro
+        group_id: sg-0df871cb89d78602d
+        vpc_subnet_id: subnet-01383d6fcf8472c81
+        region: us-west-2
+        count_tag: 2
+          Name: webserver
+        exact_count: 2
+        assign_public_ip: no
