@@ -4,6 +4,7 @@
   tasks:
     - name: create ec2 instance
       ec2:
+        key_name: Ec2KeyPair
         image: ami-032509850cf9ee54e
         wait: yes
         instance_type: t2.micro
