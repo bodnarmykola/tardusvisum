@@ -1,45 +1,60 @@
 ---
 # tasks file for docker_machine
-- name: Install prerequisites
-  yum: name ={{item}}
-  with_items:
-    - yum-utils
-    - device-mapper-persistent-data
-    - lvm2
+- name: Enable amazon-linux-extras epel
+  shell: "amazon-linux-extras enable epel"
 
-- name: Add Docker repo
-  get_url:
-    url: https://download.docker.com/linux/centos/docker-ce.repo
-    dest: /etc/yum.repos.d/docer-ce.repo
+- name: epel install
+  yum:
+    name: "{{ item }}"
+    state: installed
+  loop:
+    - epel-release
+    - wget
 
-- name: Enable Docker Edge repo
-  ini_file:
-    dest: /etc/yum.repos.d/docer-ce.repo
-    section: 'docker-ce-edge'
-    option: enabled
-    value: 0
-
-- name: Enable Docker Test repo
-  ini_file:
-    dest: /etc/yum.repos.d/docer-ce.repo
-    section: 'docker-ce-test'
-    option: enabled
-    value: 0
-
-- name: Enable Extras repository
-  ini_file:
-    dest: /etc/yum.repos.d/CentOS-Base.repo
-    section: 'centos-base'
-    option: enabled
-    value: 0
+- name: Add the yum repo
+  copy:
+    src: docker.repo
+    dest: /etc/yum.repos.d/docker.repo
 
 - name: Install Docker
-  package:
-    name: docker-ce
-    state: latest
+  yum: name={{item}} state=present
+  with_items:
+    - docker-engine
 
-- name: Start Docker service
-  service:
-    name: docker
-    state: started
-    enabled: yes
+- name: Create override directory
+  file: path=/etc/systemd/system/docker.service.d state=directory mode=0755
+
+- name: Install local.conf
+  template:
+    src: local.conf
+    dest: /etc/systemd/system/docker.service.d/
+  register: conf_file
+
+# https://github.com/ansible/ansible-modules-core/issues/191
+- shell: systemctl daemon-reload
+  when: conf_file.changed
+
+- name: Start Docker
+  service: name=docker state=started
+
+- name: Add user to docker group
+  user: name={{ item }} groups=docker append=yes
+  with_items: docker_users
+
+- name: Install Docker Compose
+  shell: curl -L https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_machine }} > /usr/local/bin/docker-compose
+  args:
+    creates: /usr/local/bin/docker-compose
+
+- name: Apply executable permissions to docker-compose
+  file: path=/usr/local/bin/docker-compose state=file mode=0755
+
+- name: Install bash-completion
+  yum: name={{ item }}
+  with_items:
+    - bash-completion
+
+- name: Install Docker Compose bash_completion
+  shell: curl -L https://raw.githubusercontent.com/docker/compose/{{ docker_compose_version }}/contrib/completion/bash/docker-compose > /etc/bash_completion.d/docker-compose
+  args:
+    creates: /etc/bash_completion.d/docker-compose
