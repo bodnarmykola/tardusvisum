@@ -3,6 +3,11 @@
 - name: Enable amazon-linux-extras epel
   shell: "amazon-linux-extras enable epel"
 
+- name: Add the yum repo
+  copy:
+    src: docker.repo
+    dest: /etc/yum.repos.d/docker.repo
+
 - name: epel install
   yum:
     name: "{{ item }}"
@@ -10,16 +15,7 @@
   loop:
     - epel-release
     - wget
-
-- name: Add the yum repo
-  copy:
-    src: docker.repo
-    dest: /etc/yum.repos.d/docker.repo
-
-- name: Install Docker
-  yum:
-    name: docker-engine
-    state: present
+    - docker-engine
 
 - name: Start Docker
   service: name=docker state=started
