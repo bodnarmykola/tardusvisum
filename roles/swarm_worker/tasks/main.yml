@@ -1,4 +1,4 @@
 ---
 # tasks file for swarm_worker
 - name: Swarm init
-  shell: docker swarm join --token {{ hostvars['swarm_manager']['worker_token']['stdout'] }} {{ hostvars['swarm_manager']['ansible_eth0']['ipv4']['address'] }}:2377"
+  shell: docker swarm join --token {{ ['worker_token']['stdout'] }} {{ ['swarm_manager']['ansible_eth0']['ipv4']['address'] }}:2377"
