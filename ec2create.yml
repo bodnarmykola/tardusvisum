@@ -32,7 +32,7 @@
           Name: swarm_worker
       register: swarm_worker
 
-    - name: Add new instance to host group
+    - name: Add new instance to launched group
       add_host:
         hostname: "{{ item.private_ip }}"
         groupname: launched
@@ -40,15 +40,19 @@
         - "{{ swarm_manager.instances }}"
         - "{{ swarm_worker.instances }}"
 
-    - name: Add new instance to host group
+    - name: Add new instance to manager group
       add_host:
-        hostname: "{{ swarm_manager.private_ip }}"
+        hostname: "{{ item.private_ip }}"
         groupname: swarm_manager
+      with_items:
+        - "{{ swarm_manager.instances }}"
 
-    - name: Add new instance to host group
+    - name: Add new instance to worker group
       add_host:
-        hostname: "{{ swarm_worker.private_ip }}"
+        hostname: "{{ item.private_ip }}"
         groupname: swarm_worker
+      with_items:
+        - "{{ swarm_worker.instances }}"
 
     - name: Wait for SSH to come up
       delegate_to: "{{ item }}"
