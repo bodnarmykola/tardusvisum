@@ -15,8 +15,22 @@
         count: 1
         instance_tags:
           Name: swarm_manager
-        state: present
       register: swarm_manager
+
+    - name: create ec2 instance for swarm manager
+      ec2:
+        key_name: Ec2KeyPair
+        image: ami-032509850cf9ee54e
+        wait: yes
+        instance_type: t2.micro
+        group_id: sg-0df871cb89d78602d
+        vpc_subnet_id: subnet-07c6811d5a119875c
+        region: us-west-2
+        assign_public_ip: yes
+        count: 1
+        instance_tags:
+          Name: nginx
+      register: nginx
 
     - name: create ec2 instance for swarm workers
       ec2:
@@ -31,7 +45,6 @@
         count: 2
         instance_tags:
           Name: swarm_worker
-        state: present
       register: swarm_worker
 
     - name: Add new instance to manager group
@@ -48,15 +61,30 @@
       with_items:
         - "{{ swarm_worker.instances }}"
 
-    - name: Delegate vars
+    - name: Add new instance to nginx group
+      add_host:
+        hostname: "{{ item.private_ip }}"
+        groupname: nginx
+      with_items:
+        - "{{ nginx.instances }}"
+
+    - name: Delay
       wait_for_connection:
-        delay: 10
+        delay: 20
         timeout: 20
 
-- name: Configure instance
+- name: Configure swarm instance
   hosts: all
   become: True
   gather_facts: True
   roles:
     - docker_machine
     - swarm
+
+- name: Configure nginx instance
+  hosts: nginx
+  become: True
+  gather_facts: True
+  roles:
+    - docker_machine
+    - nginx
