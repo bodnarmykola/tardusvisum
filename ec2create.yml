@@ -54,8 +54,9 @@
       with_items:
         - "{{ swarm_worker.instances }}"
 
-    - name: Wait for SSH to come up
-      delegate_to: "{{ item.public_dns_name }}"
+    - name: Delegating vars
+      delegate_to: "{{ item.private_ip }}"
+      delegate_facts: True
       wait_for_connection:
         delay: 10
         timeout: 20
