@@ -26,5 +26,5 @@
   when: "'swarm_manager' in group_names"
 
 - name: Docker compose run
-  shell: "docker stack deploy --compose-file="$(pwd)/docker-compose.yml" samplewar"
+  shell: "docker stack deploy --compose-file=$(pwd)/docker-compose.yml samplewar"
   when: "'swarm_manager' in group_names"
