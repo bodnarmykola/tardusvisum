@@ -15,7 +15,7 @@
         count: 1
         instance_tags:
           Name: swarm_manager
-        state: running
+        state: present
       register: swarm_manager
 
     - name: create ec2 instance for swarm workers
@@ -31,7 +31,7 @@
         count: 1
         instance_tags:
           Name: swarm_worker
-        state: running
+        state: present
       register: swarm_worker
 
     - name: Add new instance to manager group
