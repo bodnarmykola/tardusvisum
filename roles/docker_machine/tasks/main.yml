@@ -8,7 +8,7 @@
     src: docker.repo
     dest: /etc/yum.repos.d/docker.repo
 
-- name: epel install
+- name: Install
   yum:
     name: "{{ item }}"
     state: installed

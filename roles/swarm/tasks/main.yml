@@ -7,10 +7,7 @@
 - name: Get token
   shell: "docker swarm join-token -q worker"
   register: worker_token
-  delegate_to: "{{ groups['swarm_manager'][0] }}"
-  delegate_facts: True
-  when: "'swarm_worker' in group_names"
+  when: "'swarm_manager' in group_names"
 
-- name: Swarm init
-  shell: "docker swarm join --token {{ hostvars['swarm_manager']['worker_token']['stdout'] }} {{ hostvars['swarm_manager']['ansible_eth0']['ipv4']['address'] }}:2377"
-  when: "'swarm_worker' in group_names"
+- name: Show Worker Token
+  debug: var=worker_token.stdout
