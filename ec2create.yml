@@ -32,14 +32,6 @@
           Name: swarm_worker
       register: swarm_worker
 
-    - name: Add new instance to launched group
-      add_host:
-        hostname: "{{ item.private_ip }}"
-        groupname: launched
-      with_items:
-        - "{{ swarm_manager.instances }}"
-        - "{{ swarm_worker.instances }}"
-
     - name: Add new instance to manager group
       add_host:
         hostname: "{{ item.private_ip }}"
@@ -54,32 +46,15 @@
       with_items:
         - "{{ swarm_worker.instances }}"
 
-    - name: Dalay to establish ssh access
-      delegate_to: "{{ item.private_ip }}"
+    - name: Delegate vars
       wait_for_connection:
         delay: 10
         timeout: 20
-      with_items:
-        - "{{ swarm_manager.instances }}"
-        - "{{ swarm_worker.instances }}"
 
 - name: Configure instance
-  hosts: launched
+  hosts: all
   become: True
   gather_facts: True
   roles:
     - docker_machine
-
-- name: Swarm manager init
-  hosts: swarm_manager
-  become: True
-  gather_facts: True
-  roles:
-    - swarm_manager
-
-- name: Swarm worker join
-  hosts: swarm_worker
-  become: True
-  gather_facts: True
-  roles:
-    - swarm_worker
+    - swarm
