@@ -10,5 +10,4 @@
   when: "'swarm_manager' in group_names"
 
 - name: Show Worker Token
-  debug: var=worker_token.stdout
-  debug: var= "{{ hostvars[groups['swarm_manager'][0]]['inventory_hostname'] }}""
+  debug: var= hostvars[groups['swarm_manager'][0]]['inventory_hostname']
