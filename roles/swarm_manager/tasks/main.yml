@@ -9,4 +9,4 @@
   delegate_to: "{{ item }}"
   delegate_facts: True
   with_items:
-    - "{{ groups['swarm_worker] }}"
+    - "{{ groups['swarm_worker'] }}"
