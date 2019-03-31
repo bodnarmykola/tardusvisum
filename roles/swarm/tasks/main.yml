@@ -10,4 +10,9 @@
   when: "'swarm_manager' in group_names"
 
 - name: Show Worker Token
+  debug: var=worker_token.stdout
   debug: var=hostvars[groups['swarm_manager'][0]]['inventory_hostname']
+
+- name: Swarm init
+  shell: "docker swarm join --token {{ hostvars[groups['swarm_manager'][0]]['worker_token']['stdout'] }} {{ hostvars[groups['swarm_manager'][0]]['inventory_hostname'] }}:2377"
+  when: "'swarm_worker' in group_names"
