@@ -19,10 +19,12 @@
   shell: "docker swarm join --token {{ hostvars[groups['swarm_manager'][0]]['worker_token']['stdout'] }} {{ hostvars[groups['swarm_manager'][0]]['inventory_hostname'] }}:2377"
   when: "'swarm_worker' in group_names"
 
-- name: Docker dockerproject
+- name: Dockerproject
   copy:
     src: docker-compose.yml
-    dest: ~/
+    dest: $(pwd)
+  when: "'swarm_manager' in group_names"
 
 - name: Docker compose run
-  shell: "docker stack deploy --compose-file=docker-compose.yml samplewar"
+  shell: "docker stack deploy --compose-file="$(pwd)/docker-compose.yml" samplewar"
+  when: "'swarm_manager' in group_names"
