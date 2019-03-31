@@ -6,3 +6,7 @@
 - name: Get token
   shell: "docker swarm join-token -q worker"
   register: worker_token
+  delegate_to: "{{ item.private_ip }}"
+  delegate_facts: True
+  with_items:
+    - "{{ swarm_worker.instances }}"

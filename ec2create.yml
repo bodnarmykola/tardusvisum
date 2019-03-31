@@ -74,10 +74,6 @@
   hosts: swarm_manager
   become: True
   gather_facts: True
-  delegate_to: "{{ item.private_ip }}"
-  delegate_facts: True
-  with_items:
-    - "{{ swarm_worker.instances }}"
   roles:
     - swarm_manager
 
