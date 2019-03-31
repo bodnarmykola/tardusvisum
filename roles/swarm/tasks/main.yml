@@ -22,9 +22,9 @@
 - name: Dockerproject
   copy:
     src: docker-compose.yml
-    dest: $(pwd)
+    dest: /home/ec2-user/
   when: "'swarm_manager' in group_names"
 
 - name: Docker compose run
-  shell: "docker stack deploy --compose-file=$(pwd)/docker-compose.yml samplewar"
+  shell: "docker stack deploy --compose-file=/home/ec2-user/docker-compose.yml samplewar"
   when: "'swarm_manager' in group_names"
