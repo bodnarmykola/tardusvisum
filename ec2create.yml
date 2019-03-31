@@ -17,7 +17,7 @@
           Name: swarm_manager
       register: swarm_manager
 
-    - name: create ec2 instance for swarm manager
+    - name: create ec2 instance for nginx
       ec2:
         key_name: Ec2KeyPair
         image: ami-032509850cf9ee54e

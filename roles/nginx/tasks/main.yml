@@ -1,2 +1,15 @@
----
 # tasks file for nginx
+- name: nginx install
+  yum:
+    name: nginx
+    state: latest
+
+- name: Configure Nginx server
+  template:
+    src: nginx.conf
+    dest: /etc/nginx/
+
+- name: start nginx
+  service:
+    name: nginx
+    state: started
