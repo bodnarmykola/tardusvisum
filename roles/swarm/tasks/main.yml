@@ -7,7 +7,7 @@
 - name: Get token
   shell: "docker swarm join-token -q worker"
   register: worker_token
-  delegate_to: "{{ groups['swarm_worker'] }}"
+  delegate_to: "{{ groups['swarm_worker'][0] }}"
   when: "'swarm_manager' in group_names"
 
 - name: Swarm init
