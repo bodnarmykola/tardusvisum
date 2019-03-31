@@ -28,7 +28,7 @@
         vpc_subnet_id: subnet-07c6811d5a119875c
         region: us-west-2
         assign_public_ip: yes
-        count: 1
+        count: 2
         instance_tags:
           Name: swarm_worker
         state: present
