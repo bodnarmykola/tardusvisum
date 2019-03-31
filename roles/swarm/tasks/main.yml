@@ -11,6 +11,8 @@
 
 - name: Show Worker Token
   debug: var=worker_token.stdout
+
+- name: Show Worker Token
   debug: var=hostvars[groups['swarm_manager'][0]]['inventory_hostname']
 
 - name: Swarm init
