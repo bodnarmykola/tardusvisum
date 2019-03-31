@@ -54,9 +54,8 @@
       with_items:
         - "{{ swarm_worker.instances }}"
 
-    - name: Delegating vars
+    - name: Dalay to establish ssh access
       delegate_to: "{{ item.private_ip }}"
-      delegate_facts: True
       wait_for_connection:
         delay: 10
         timeout: 20
@@ -75,6 +74,10 @@
   hosts: swarm_manager
   become: True
   gather_facts: True
+  delegate_to: "{{ item.private_ip }}"
+  delegate_facts: True
+  with_items:
+    - "{{ swarm_worker.instances }}"
   roles:
     - swarm_manager
 
